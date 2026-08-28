@@ -55,6 +55,7 @@ LifeOS brings conversation, goals, daily planning, research, personal knowledge,
 | ❤️ **Health & Care** | Health-focused intelligence and care workflows — the flagship vertical |
 | 🔬 **Research** | Research-oriented knowledge and information workflows |
 | 📚 **Library** | Personal files and knowledge workspace |
+| 🤖 **Agents** | Specialized, permissioned task agents with review/approval gates |
 | 🔐 **Privacy** | User-facing privacy and data-control experience |
 | ⚙️ **Settings** | Product, account and experience configuration |
 | 🎨 **AI Creation** | Image generation and creative workflows |
@@ -130,7 +131,127 @@ LifeOS is designed around an orchestration model rather than dependence on one m
 
 ---
 
-## 📊 Capability Map
+## 📊 Framework Comparison
+
+LifeOS is **framework-agnostic by design**. A framework should be selected for a specific workload rather than forcing the entire product into one abstraction.
+
+| Framework / approach | Strong fit | LifeOS role | Key trade-off |
+|---|---|---|---|
+| **LangGraph** | Stateful, durable, graph-based agent workflows | ⭐ Strong candidate for complex agent orchestration | More explicit architecture and operational complexity |
+| **OpenAI Agents SDK** | Lightweight agents, tools, handoffs, guardrails and tracing | ⭐ Strong candidate for focused LifeOS agents | Greater dependence on OpenAI's ecosystem |
+| **CrewAI** | Role-based multi-agent teams and rapid prototypes | 🧪 Research/prototyping option | Higher-level abstraction can become harder to control at scale |
+| **Microsoft Agent Framework** | Microsoft/Azure-oriented agent and workflow systems | 🔭 Enterprise integration research | Best fit depends on Microsoft ecosystem requirements |
+| **Google ADK** | Google/Gemini-oriented agent systems | 🔭 Gemini ecosystem research | GCP/Gemini alignment may influence architecture |
+| **LlamaIndex** | Document-heavy RAG and knowledge workflows | ⭐ Strong candidate for Library/Research experiments | More focused on data/knowledge workflows than the whole OS |
+| **Direct model/tool loop** | Small, controlled workflows | ✅ Preferred when a framework adds no value | More engineering responsibility |
+
+### LifeOS decision rule
+
+> **Use the smallest abstraction that gives LifeOS the reliability, state, observability, security and human-control guarantees required by the task.**
+
+Current industry comparisons also emphasize a similar distinction: graph/stateful systems are useful for durable, auditable workflows; role-based frameworks optimize rapid multi-agent prototyping; and lightweight agent SDKs reduce abstraction for focused agents. citeturn0search1turn0search2
+
+---
+
+## 🔧 Browse by Framework
+
+LifeOS can organize future agents and integrations by the framework/runtime they use.
+
+### LangGraph
+**Best for:** stateful workflows, durable execution, checkpoints, complex routing and human-in-the-loop systems.
+
+Potential LifeOS projects:
+
+- 🧠 Memory orchestration
+- 🎯 Goal → plan → action workflows
+- 🔬 Deep research graphs
+- ❤️ Care coordination workflows
+- 🤖 Approval-gated agent pipelines
+
+### OpenAI Agents SDK
+**Best for:** focused agents, tools, handoffs, guardrails and tracing.
+
+Potential LifeOS projects:
+
+- 🧠 ASK LifeOS specialist agents
+- 🔎 Research Agent
+- 🎯 Planning Agent
+- 📚 Library Agent
+- 🛡️ Safety/Policy Agent
+
+### CrewAI
+**Best for:** role-based agent teams and rapid multi-agent experiments.
+
+Potential LifeOS projects:
+
+- Researcher + Writer + Reviewer
+- Marketing/content team
+- Career planning team
+- Business analysis team
+
+### Microsoft Agent Framework
+**Best for:** Microsoft ecosystem and enterprise-oriented agent workflows.
+
+Potential LifeOS projects:
+
+- Enterprise Care Circle workflows
+- Microsoft 365 productivity integrations
+- Organization knowledge agents
+
+### Google ADK
+**Best for:** Google/Gemini-oriented agent applications.
+
+Potential LifeOS projects:
+
+- Gemini multimodal workflows
+- Research agents
+- Workspace integrations
+
+### LlamaIndex
+**Best for:** documents, retrieval, indexing and knowledge-intensive applications.
+
+Potential LifeOS projects:
+
+- 📚 Personal Library RAG
+- 🔬 Research knowledge base
+- ❤️ Health-document understanding
+- 🧠 Personal knowledge graph experiments
+
+> Framework pages are an architectural catalog, not a claim that every framework is currently installed in the repository. Each integration should earn its place through benchmarks and a real product requirement.
+
+---
+
+## 🏭 Industry Use Cases
+
+LifeOS is designed as a broad operating layer, with **Health & Care as the flagship vertical**.
+
+| Industry | Example LifeOS capability | Priority |
+|---|---|---|
+| ❤️ Healthcare & Care | Health context, care coordination, health information organization | ⭐ Flagship |
+| 🎓 Education | Study planning, research, learning workflows | High |
+| 💼 Career | Career planning, applications, interview preparation | High |
+| 🏢 Business | Meetings, research, planning, workflow automation | High |
+| 🔬 Research | Deep research, evidence synthesis, knowledge management | High |
+| 💰 Finance | Personal organization, budgeting workflows and financial research | Medium |
+| 👨‍👩‍👧 Family | Care Circle, shared goals, household planning | High |
+| ✈️ Travel | Trip planning, documents, schedules and next actions | Medium |
+| 🧑‍💻 Software | Coding research, project planning, documentation and agents | High |
+| 🎨 Creative | Image, video, writing and content workflows | High |
+| 📣 Marketing | Campaign planning, research, content and analytics workflows | Medium |
+| 🛍️ E-commerce | Product research, shopping assistance and operations | Medium |
+| 🏠 Personal Life | Routines, goals, tasks, decisions and daily planning | ⭐ Core |
+
+### Use-case architecture
+
+Every industry workflow should map back to the same LifeOS primitives:
+
+**Context → Memory → Understanding → Reasoning → Tools → Action → Outcome**
+
+This lets LifeOS expand vertically without creating a completely different architecture for every industry.
+
+---
+
+## 🧩 Capability Map
 
 | Capability | LifeOS AI direction |
 |---|---|
@@ -148,6 +269,60 @@ LifeOS is designed around an orchestration model rather than dependence on one m
 | Payments / subscriptions | ✅ Integrated workflow |
 | Agentic orchestration | 🚧 Roadmap |
 | Continuous learning | 🚧 Roadmap |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! 🎉 LifeOS should grow through ideas, research, documentation, integrations and carefully reviewed code.
+
+### Ways to contribute
+
+1. **Build a LifeOS capability** — add a focused module, agent, tool adapter or UI improvement.
+2. **Add an integration** — propose a framework, model, data source or external tool with a clear use case.
+3. **Add an industry use case** — document a realistic workflow and its safety/permission requirements.
+4. **Improve research** — add primary sources, benchmarks, experiments or architecture findings.
+5. **Fix a bug or broken link** — open an issue or submit a focused pull request.
+6. **Improve documentation** — clarify setup, architecture, examples or limitations.
+7. **Improve accessibility** — keyboard navigation, screen-reader support, contrast and multimodal usability.
+
+### Contribution flow
+
+```text
+Fork
+  ↓
+Create a branch
+  ↓
+Make one focused change
+  ↓
+Add/update tests where applicable
+  ↓
+Document the change
+  ↓
+Open a Pull Request
+  ↓
+Review → Verify → Merge
+```
+
+Recommended branch names:
+
+- `feat/memory-engine`
+- `feat/research-agent`
+- `feat/health-care`
+- `feat/framework-adapter`
+- `fix/description`
+- `docs/research-topic`
+
+### Contribution principles
+
+- Keep changes focused and reviewable.
+- Never commit API keys, tokens or private health information.
+- Do not introduce an agent with consequential external actions without explicit authorization and approval controls.
+- Clearly label prototypes, experiments and production-ready features.
+- Add evidence and citations when making research or health-related claims.
+- Prefer measurable improvements over feature count.
+
+See the repository's contribution and security documentation before opening a large change.
 
 ---
 
@@ -242,6 +417,9 @@ LifeOS-AI/
 ├── README.md
 ├── index.html
 ├── package.json
+├── docs/
+│   └── research/
+│       └── LifeOS-Deep-Research-Roadmap-2026.md
 └── src/
     └── application source
 ```
@@ -260,6 +438,8 @@ LifeOS is designed with privacy and user control as first-class concerns.
 - 👤 Human control remains central to consequential decisions.
 - 🧯 AI output should be treated as assistance, not automatic authority.
 
+For AI risk management, LifeOS research tracks the NIST AI Risk Management Framework and its Generative AI Profile as a baseline for trustworthy AI lifecycle practices. citeturn0search5
+
 ---
 
 ## 🗺️ Roadmap
@@ -276,6 +456,9 @@ LifeOS is designed with privacy and user control as first-class concerns.
 - [x] Video generation workflow
 - [x] Razorpay billing foundation
 - [x] GitHub project documentation
+- [x] Framework comparison and browsing architecture
+- [x] Industry use-case catalog
+- [x] Contribution guide
 
 ### V2 — Personal Intelligence
 
