@@ -179,14 +179,6 @@ Recommended branches: `feat/memory-engine` · `feat/research-agent` · `feat/hea
 
 **Never commit API keys, tokens or private health information.** Consequential external actions must have appropriate authorization and approval controls.
 
-## ⭐ Star History
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/AddiX123/LifeOS-AI/main/images/star-history.svg" alt="LifeOS AI Star History" width="850" />
-</p>
-
-> **Real-time chart:** A GitHub Action regenerates this chart from the repository's stargazer timeline every day. The chart shows verified repository stars; it does not use the illustrative 10K target graphic.
-
 ## 🔐 Security Principles
 
 - Never commit API keys or credentials.
@@ -210,7 +202,6 @@ Recommended branches: `feat/memory-engine` · `feat/research-agent` · `feat/hea
 - [x] Framework comparison and browsing architecture
 - [x] Industry use-case catalog
 - [x] Contribution guide
-- [x] Automated Star History
 
 ### V2 — Personal Intelligence
 
