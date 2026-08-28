@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react';
 import { ArrowUpRight, Check, Circle, Sparkles } from 'lucide-react';
 import type { LifeGoal } from './lifeos-workspace';
 
-export type QuickAction = { label: string; description: string; icon?: React.ReactNode; onClick: () => void };
+export type QuickAction = { label: string; description: string; icon?: ReactNode; onClick: () => void };
 export type ActivityItem = { title: string; meta: string; status?: string };
 
-export function WorkspaceCard({ title, eyebrow, children, action }: { title: string; eyebrow?: string; children: React.ReactNode; action?: React.ReactNode }) {
+export function WorkspaceCard({ title, eyebrow, children, action }: { title: string; eyebrow?: string; children: ReactNode; action?: ReactNode }) {
   return <section className="workspace-card"><div className="workspace-card-head"><div>{eyebrow && <span className="eyebrow"><Sparkles size={12}/>{eyebrow}</span>}<h3>{title}</h3></div>{action}</div>{children}</section>;
 }
 
