@@ -1,0 +1,84 @@
+name: Update Star History
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  star-history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate star history
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          from datetime import datetime, timezone
+
+          owner, repo = os.environ['GITHUB_REPOSITORY'].split('/', 1)
+          query = '''query($owner:String!, $repo:String!, $cursor:String) {
+            repository(owner:$owner, name:$repo) {
+              stargazers(first:100, after:$cursor, orderBy:{field:STARRED_AT, direction:ASC}) {
+                totalCount
+                pageInfo { hasNextPage endCursor }
+                edges { starredAt }
+              }
+            }
+          }'''
+
+          stars=[]
+          cursor=None
+          while True:
+              payload=json.dumps({'query':query,'variables':{'owner':owner,'repo':repo,'cursor':cursor}})
+              result=subprocess.run(['gh','api','graphql','-f',f'query={query}','-F',f'owner={owner}','-F',f'repo={repo}','-F',f'cursor={cursor or "null"}'],capture_output=True,text=True)
+              if result.returncode != 0:
+                  raise SystemExit(result.stderr)
+              data=json.loads(result.stdout)
+              if data.get('errors'):
+                  raise SystemExit(json.dumps(data['errors']))
+              page=data['data']['repository']['stargazers']
+              stars.extend(e['starredAt'] for e in page['edges'])
+              if not page['pageInfo']['hasNextPage']:
+                  total=page['totalCount']; break
+              cursor=page['pageInfo']['endCursor']
+
+          # Build a compact SVG with one point per day and the current total.
+          from collections import Counter
+          days=Counter(s[:10] for s in stars)
+          labels=sorted(days)
+          cumulative=[]; n=0
+          for d in labels:
+              n += days[d]; cumulative.append(n)
+          if not labels:
+              labels=['No stars yet']; cumulative=[0]
+          W,H=1200,520; left,right,top,bottom=90,70,100,100
+          plot_w=W-left-right; plot_h=H-top-bottom
+          ymax=max(10,max(cumulative)); step=plot_w/max(1,len(cumulative)-1)
+          points=[]
+          for i,v in enumerate(cumulative):
+              x=left+(i*step); y=top+plot_h-(v/ymax)*plot_h
+              points.append(f'{x:.1f},{y:.1f}')
+          path=' '.join(points)
+          latest=labels[-1] if labels else datetime.now(timezone.utc).date().isoformat()
+          svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc"><title id="title">LifeOS AI GitHub Star History</title><desc id="desc">Automatically generated from the repository stargazer timeline. Current stars: {total}.</desc><rect width="1200" height="520" rx="24" fill="#0b1020"/><text x="70" y="68" fill="#fff" font-family="Arial,sans-serif" font-size="30" font-weight="700">⭐ LifeOS AI — Star History</text><text x="70" y="102" fill="#aab4cc" font-family="Arial,sans-serif" font-size="16">Real repository stargazer timeline • {total:,} current stars</text><g stroke="#27314a" stroke-width="1">{''.join(f'<line x1="90" y1="{top+i*plot_h/4:.1f}" x2="1130" y2="{top+i*plot_h/4:.1f}"/>' for i in range(5))}</g><polyline fill="none" stroke="#7c8cff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" points="{path}"/><circle cx="{points[-1].split(',')[0]}" cy="{points[-1].split(',')[1]}" r="10" fill="#fff" stroke="#7c8cff" stroke-width="5"/><text x="70" y="475" fill="#7f8ba6" font-family="Arial,sans-serif" font-size="13">Updated automatically by GitHub Actions • Latest stargazer date: {latest}</text></svg>'''
+          os.makedirs('images',exist_ok=True)
+          open('images/star-history.svg','w',encoding='utf-8').write(svg)
+          print(f'Generated chart for {total} stars')
+          PY
+
+      - name: Commit chart
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add images/star-history.svg
+          git diff --cached --quiet && exit 0
+          git commit -m 'chore: update star history chart'
+          git push
