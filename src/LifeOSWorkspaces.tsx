@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type Dispatch, type SetStateAction } from 'react';
 import { Activity, Check, CircleCheck, HeartPulse, Play, Plus, ShieldCheck, Sparkles, Target, WandSparkles } from 'lucide-react';
 import { completeGoal, createGoal, pickNextBestAction, type GoalPriority, type LifeGoal } from './lifeos-workspace';
 import { ActivityList, GoalList, QuickActions, WorkspaceCard } from './LifeOSWorkspaceCards';
 
-const starterGoals: LifeGoal[] = [
+export const starterGoals: LifeGoal[] = [
   { id: 'starter-1', title: 'Protect the morning focus block', priority: 'high', completed: false },
   { id: 'starter-2', title: 'Move one important project forward', priority: 'medium', completed: false },
   { id: 'starter-3', title: 'Review weekly direction', priority: 'low', completed: false },
@@ -19,7 +19,7 @@ export function TodayWorkspace({ goals, onNavigate, onComplete }: { goals: LifeG
   </div>;
 }
 
-export function GoalsWorkspace({ goals, setGoals }: { goals: LifeGoal[]; setGoals: React.Dispatch<React.SetStateAction<LifeGoal[]>> }) {
+export function GoalsWorkspace({ goals, setGoals }: { goals: LifeGoal[]; setGoals: Dispatch<SetStateAction<LifeGoal[]>> }) {
   const [title, setTitle] = useState(''); const [priority, setPriority] = useState<GoalPriority>('medium');
   const add = () => { if (!title.trim()) return; setGoals((current) => [...current, createGoal(title, priority)]); setTitle(''); };
   return <div className="workspace-page"><div className="page-head"><div><span className="eyebrow"><Target size={13}/> LIFE GOALS</span><h1>Make the important measurable.</h1><p>Goals are local V1 workspace state until a persistence API is connected.</p></div></div><WorkspaceCard title="Add a goal"><div className="goal-form"><input value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && add()} placeholder="What matters right now?"/><select value={priority} onChange={(e) => setPriority(e.target.value as GoalPriority)}><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select><button className="primary-button" onClick={add}><Plus size={16}/> Add goal</button></div></WorkspaceCard><WorkspaceCard title="Your goals"><GoalList goals={goals} onComplete={(goal) => setGoals((current) => current.map((item) => item.id === goal.id ? completeGoal(item) : item))}/></WorkspaceCard></div>;
